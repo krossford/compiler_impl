@@ -39,4 +39,58 @@ public class RETreeNodeTest {
         RETreeNode treeNode = RETreeNode.convert(re);
         Assert.assertEquals(treeNode.toRE(), re);
     }
+
+    @Test
+    public void test5() {
+
+        String re = "ab*";
+
+        RETreeNode treeNode = RETreeNode.convert(re);
+        Assert.assertEquals(treeNode.toRE(), re);
+    }
+
+    @Test
+    public void test6() {
+
+        String re = "ab*c";
+
+        RETreeNode treeNode = RETreeNode.convert(re);
+        Assert.assertEquals(treeNode.toRE(), re);
+    }
+
+    @Test
+    public void test7() {
+
+        String re = "a(b|c)*d";
+
+        RETreeNode treeNode = RETreeNode.convert(re);
+        Assert.assertEquals(treeNode.toRE(), re);
+    }
+
+    @Test
+    public void test8() {
+
+        String re = "a(b|cqqq)*d";
+
+        RETreeNode treeNode = RETreeNode.convert(re);
+        Assert.assertEquals(treeNode.toRE(), re);
+    }
+
+    @Test
+    public void test9() {
+
+        String re = "a*(b|cqqq)*d";
+
+        RETreeNode treeNode = RETreeNode.convert(re);
+        Assert.assertEquals(treeNode.toRE(), re);
+    }
+
+    @Test
+    public void test10() {
+
+        String re = "(ab)*d";
+
+        RETreeNode treeNode = RETreeNode.convert(re);
+        Assert.assertEquals(treeNode.toRE(), re);
+    }
 }

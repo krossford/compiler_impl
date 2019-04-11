@@ -28,67 +28,87 @@ public abstract class RETreeNode {
      * */
     public static RETreeNode convert(String re) {
 
-        Stack<Stack<Character>> stacks = new Stack<>();
+        Stack<Stack<RETreeNode>> stacks = new Stack<>();
 
-        Stack<Character> currStack = new Stack<>();
+        Stack<RETreeNode> currStack = new Stack<>();
 
         stacks.push(currStack);
 
-        RETreeNode root = null;
-        RETreeNode currNode = null;
-
-        for (Character c : re.toCharArray()) {
+        for (int i = 0; i < re.toCharArray().length; i++) {
+            char c = re.charAt(i);
             if (c == '(') {
-                Stack<Character> newStack = new Stack<>();
+                // 遇见左括号，要创建一个新的栈出来存放字符
+                Stack<RETreeNode> newStack = new Stack<>();
                 stacks.push(newStack);
                 currStack = newStack;
             } else if (c == ')') {
-
-            } else if (c == '|') {
-                String s = popStackToString(currStack);
-                if (currNode == null) {
-                    RESelectionNode selectionNode = new RESelectionNode();
-                    selectionNode.left = new REStringNode(s);
-                    currNode = selectionNode;
-                    root = currNode;
+                RETreeNode seqNode = popStackToNode(currStack);
+                stacks.pop();
+                currStack = stacks.peek();
+                if (!currStack.isEmpty() && currStack.peek() instanceof RESelectionNode) {
+                    i--;
+                    ((RESelectionNode) currStack.peek()).right = seqNode;
                 } else {
-                    RESelectionNode selectionNode = new RESelectionNode();
-                    selectionNode.left = new REStringNode(s);
-                    if (currNode instanceof RESelectionNode) {
-                        ((RESelectionNode) currNode).right = selectionNode;
-                        currNode = selectionNode;
-                    }
+                    currStack.push(seqNode);
                 }
-            } else if (c == '*') {
+            } else if (c == '|') {
+                RETreeNode seqNode = popStackToNode(currStack);
+                RESelectionNode selectionNode = new RESelectionNode();
+                selectionNode.left = seqNode;
+                currStack.push(selectionNode);
 
+                Stack<RETreeNode> newStack = new Stack<>();
+                stacks.push(newStack);
+                currStack = newStack;
+            } else if (c == '*') {
+                RETreeNode node = currStack.pop();
+                REKleeneNode kleeneNode = new REKleeneNode();
+                kleeneNode.op = node;
+                currStack.push(kleeneNode);
             } else if (isLetter(c) || isNumber(c)) {
-                currStack.push(c);
+                currStack.push(new REStringNode(String.valueOf(c)));
             } else {
                 System.out.println("Error, unknown character: " + c);
                 return null;
             }
         }
 
-        if (currNode != null) {
-            if (currNode instanceof RESelectionNode) {
-                ((RESelectionNode) currNode).right = new REStringNode(popStackToString(currStack));
-            }
-        } else {
-            root = currNode = new REStringNode(popStackToString(currStack));
+        RETreeNode node = null;
 
+        while (!currStack.isEmpty() || !stacks.isEmpty()) {
+            node = popStackToNode(currStack);
+
+            if (!stacks.isEmpty()) {
+                stacks.pop();
+            }
+
+            if (stacks.isEmpty()) {
+                break;
+            }
+
+            currStack = stacks.peek();
+
+            if (!currStack.isEmpty() && currStack.peek() instanceof RESelectionNode) {
+                ((RESelectionNode) currStack.peek()).right = node;
+            } else {
+                currStack.push(node);
+            }
         }
 
-        return root;
+        return node;
     }
 
-    public static String popStackToString(Stack<Character> stack) {
-        StringBuilder sb = new StringBuilder();
+    public static RETreeNode popStackToNode(Stack<RETreeNode> stack) {
+        if (stack.size() == 1) {
+            return stack.pop();
+        } else {
+            RESequenceNode node = new RESequenceNode();
 
-        while (!stack.isEmpty()) {
-            sb.insert(0, stack.pop());
+            while (!stack.isEmpty()) {
+                node.list.add(0, stack.pop());
+            }
+            return node;
         }
-
-        return sb.toString();
     }
 
     public static boolean isLetter(char c) {
