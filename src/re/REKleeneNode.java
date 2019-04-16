@@ -18,14 +18,14 @@ public class REKleeneNode extends RETreeNode {
     }
 
     @Override
-    public NFA toNFA() {
+    public NFA toNFA(boolean isAccept) {
         NFA nfa = new NFA();
 
         NFAState start = new NFAState();
 
         NFAState end = new NFAState();
 
-        NFA opNFA = op.toNFA();
+        NFA opNFA = op.toNFA(false);
 
         opNFA.endState.addTrans("", opNFA.startState);
         opNFA.endState.addTrans("", end);
@@ -35,6 +35,7 @@ public class REKleeneNode extends RETreeNode {
 
         nfa.startState = start;
         nfa.endState = end;
+        nfa.endState.isAccept = isAccept;
 
         return nfa;
     }

@@ -133,6 +133,6 @@ public abstract class RETreeNode {
 
     public abstract String toRE();
 
-    public abstract NFA toNFA();
+    public abstract NFA toNFA(boolean isAccept);
 
 }

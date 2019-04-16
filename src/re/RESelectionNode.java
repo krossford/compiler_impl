@@ -14,15 +14,15 @@ public class RESelectionNode extends RETreeNode{
     }
 
     @Override
-    public NFA toNFA() {
+    public NFA toNFA(boolean isAccept) {
         NFA nfa = new NFA();
 
         NFAState start = new NFAState();
 
         NFAState end = new NFAState();
 
-        NFA leftNFA = left.toNFA();
-        NFA rightNFA = right.toNFA();
+        NFA leftNFA = left.toNFA(false);
+        NFA rightNFA = right.toNFA(false);
 
         start.addTrans("", leftNFA.startState);
         start.addTrans("", rightNFA.startState);
@@ -32,6 +32,7 @@ public class RESelectionNode extends RETreeNode{
 
         nfa.startState = start;
         nfa.endState = end;
+        nfa.endState.isAccept = isAccept;
 
         return nfa;
     }

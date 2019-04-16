@@ -17,10 +17,11 @@ public class REStringNode extends RETreeNode {
     }
 
     @Override
-    public NFA toNFA() {
+    public NFA toNFA(boolean isAccept) {
         NFA nfa = new NFA();
         nfa.startState = new NFAState();
         nfa.endState = new NFAState();
+        nfa.endState.isAccept = isAccept;
         nfa.startState.addTrans(String.valueOf(content), nfa.endState);
         return nfa;
     }

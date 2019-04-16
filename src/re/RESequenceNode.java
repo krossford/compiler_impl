@@ -22,15 +22,20 @@ public class RESequenceNode extends RETreeNode {
     }
 
     @Override
-    public NFA toNFA() {
+    public NFA toNFA(boolean isAccept) {
         if (list == null || list.size() == 0) {
             return null;
         } else {
-            NFA nfa = list.get(0).toNFA();
-            for (int i = 1; i < list.size(); i++) {
-                nfa = NFA.link(nfa, list.get(i).toNFA());
+            if (list.size() == 1) {
+                NFA nfa = list.get(0).toNFA(isAccept);
+                return nfa;
+            } else {
+                NFA nfa = list.get(0).toNFA(false);
+                for (int i = 1; i < list.size(); i++) {
+                    nfa = NFA.link(nfa, list.get(i).toNFA(i == list.size() - 1 ? isAccept : false));
+                }
+                return nfa;
             }
-            return nfa;
         }
     }
 }

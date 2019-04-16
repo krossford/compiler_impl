@@ -1,5 +1,6 @@
 package re;
 
+import nfa.NFA;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ public class RETreeNodeTest {
         RETreeNode treeNode = RETreeNode.convert(re);
         Assert.assertEquals(treeNode.toRE(), re);
 
-        treeNode.toNFA();
+        NFA nfa = NFA.removeEmptyTrans(treeNode.toNFA(true));
     }
 
     @Test
@@ -89,15 +90,6 @@ public class RETreeNodeTest {
 
     @Test
     public void test10() {
-
-        String re = "(ab)*d";
-
-        RETreeNode treeNode = RETreeNode.convert(re);
-        Assert.assertEquals(treeNode.toRE(), re);
-    }
-
-    @Test
-    public void test11() {
 
         String re = "(ab)*d";
 
