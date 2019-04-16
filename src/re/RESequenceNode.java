@@ -1,5 +1,7 @@
 package re;
 
+import nfa.NFA;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,5 +19,18 @@ public class RESequenceNode extends RETreeNode {
             sb.append(node.toRE());
         }
         return sb.toString();
+    }
+
+    @Override
+    public NFA toNFA() {
+        if (list == null || list.size() == 0) {
+            return null;
+        } else {
+            NFA nfa = list.get(0).toNFA();
+            for (int i = 1; i < list.size(); i++) {
+                nfa = NFA.link(nfa, list.get(i).toNFA());
+            }
+            return nfa;
+        }
     }
 }

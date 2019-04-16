@@ -1,5 +1,8 @@
 package re;
 
+import nfa.NFA;
+import nfa.NFAState;
+
 public class RESelectionNode extends RETreeNode{
 
     public RETreeNode left = null;
@@ -8,5 +11,28 @@ public class RESelectionNode extends RETreeNode{
     @Override
     public String toRE() {
         return left.toRE() + "|" + right.toRE();
+    }
+
+    @Override
+    public NFA toNFA() {
+        NFA nfa = new NFA();
+
+        NFAState start = new NFAState();
+
+        NFAState end = new NFAState();
+
+        NFA leftNFA = left.toNFA();
+        NFA rightNFA = right.toNFA();
+
+        start.addTrans("", leftNFA.startState);
+        start.addTrans("", rightNFA.startState);
+
+        leftNFA.endState.addTrans("", end);
+        rightNFA.endState.addTrans("", end);
+
+        nfa.startState = start;
+        nfa.endState = end;
+
+        return nfa;
     }
 }

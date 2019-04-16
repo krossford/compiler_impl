@@ -1,6 +1,7 @@
 package re;
 
 import com.sun.media.sound.RIFFInvalidDataException;
+import nfa.NFA;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -82,7 +83,7 @@ public abstract class RETreeNode {
                 kleeneNode.op = node;
                 currStack.push(kleeneNode);
             } else if (isLetter(c) || isNumber(c)) {
-                currStack.push(new REStringNode(String.valueOf(c)));
+                currStack.push(new REStringNode(c));
             } else {
                 System.out.println("Error, unknown character: " + c);
                 return null;
@@ -131,5 +132,7 @@ public abstract class RETreeNode {
     }
 
     public abstract String toRE();
+
+    public abstract NFA toNFA();
 
 }
