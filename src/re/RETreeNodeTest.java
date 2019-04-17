@@ -15,6 +15,8 @@ public class RETreeNodeTest {
         Assert.assertEquals(treeNode.toRE(), re);
 
         NFA nfa = NFA.removeEmptyTrans(treeNode.toNFA(true));
+        System.out.println(nfa.toString());
+
     }
 
     @Test
@@ -23,6 +25,9 @@ public class RETreeNodeTest {
         String re = "abc|bc";
         RETreeNode treeNode = RETreeNode.convert(re);
         Assert.assertEquals(treeNode.toRE(), re);
+
+        NFA nfa = NFA.removeEmptyTrans(treeNode.toNFA(true));
+        System.out.println(nfa.toString());
     }
 
     @Test
@@ -32,6 +37,9 @@ public class RETreeNodeTest {
 
         RETreeNode treeNode = RETreeNode.convert(re);
         Assert.assertEquals(treeNode.toRE(), re);
+
+        NFA nfa = NFA.removeEmptyTrans(treeNode.toNFA(true));
+        System.out.println(nfa.toString());
     }
 
     @Test
@@ -41,6 +49,9 @@ public class RETreeNodeTest {
 
         RETreeNode treeNode = RETreeNode.convert(re);
         Assert.assertEquals(treeNode.toRE(), re);
+
+        NFA nfa = NFA.removeEmptyTrans(treeNode.toNFA(true));
+        System.out.println(nfa.toString());
     }
 
     @Test
@@ -50,6 +61,9 @@ public class RETreeNodeTest {
 
         RETreeNode treeNode = RETreeNode.convert(re);
         Assert.assertEquals(treeNode.toRE(), re);
+
+        NFA nfa = NFA.removeEmptyTrans(treeNode.toNFA(true));
+        System.out.println(nfa.toString());
     }
 
     @Test

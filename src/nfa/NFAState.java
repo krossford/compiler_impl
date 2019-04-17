@@ -53,4 +53,16 @@ public class NFAState {
         }
         return all;
     }
+
+    /**
+     * 获取所有输入的列表
+     * */
+    public Set<String> getAllTransInput() {
+        Set<String> all = new HashSet<>();
+        Iterator<Map.Entry<String, Set<NFAState>>> it = transMap.entrySet().iterator();
+        while (it.hasNext()) {
+            all.add(it.next().getKey());
+        }
+        return all;
+    }
 }
