@@ -1,8 +1,10 @@
-package re;
+package test;
 
 import nfa.NFA;
+import nfa.NFAState;
 import org.junit.Assert;
 import org.junit.Test;
+import re.RETreeNode;
 
 public class RETreeNodeTest {
 
@@ -16,6 +18,24 @@ public class RETreeNodeTest {
 
         NFA nfa = NFA.removeEmptyTrans(treeNode.toNFA(true));
         System.out.println(nfa.toString());
+
+        NFA nfa2 = new NFA();
+
+        NFAState s0 = new NFAState();
+        NFAState s1 = new NFAState();
+        NFAState s2 = new NFAState();
+        NFAState s3 = new NFAState();
+        s0.addTrans("a", s1);
+        s1.addTrans("b", s2);
+        s2.addTrans("c", s3);
+        s3.isAccept = true;
+
+        nfa2.startState = s0;
+        nfa2.endState = s3;
+
+        System.out.println(nfa2.toString());
+
+        Assert.assertEquals(nfa.toString(), nfa2.toString());
 
     }
 

@@ -1,9 +1,8 @@
 package nfa;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import util.Util;
+
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -67,18 +66,30 @@ public class NFA {
 
         StringBuilder sb = new StringBuilder();
 
+        // -----------------
+        // output all states
+        // -----------------
+
         sb.append("states:{ ");
-        map_stateObj_to_no.forEach(new BiConsumer<NFAState, Integer>() {
+        List<Integer> stateNoSortedList = Util.asSortedList(map_stateObj_to_no.values());
+        stateNoSortedList.forEach(new Consumer<Integer>() {
             @Override
-            public void accept(NFAState nfaState, Integer integer) {
+            public void accept(Integer integer) {
                 sb.append(integer).append(", ");
             }
         });
         sb.delete(sb.length() - 2, sb.length());
         sb.append(" }\n");
 
+        // ------------------
+        // output start state
+        // ------------------
+
         sb.append("start:{ ").append(map_stateObj_to_no.get(startState)).append(" }\n");
 
+        // --------------------
+        // output accept states
+        // --------------------
         sb.append("accept:{ ");
         acceptStates.forEach(new Consumer<NFAState>() {
             @Override
@@ -105,9 +116,9 @@ public class NFA {
 
         index = 1;
 
-        map_stateObj_to_no.forEach(new BiConsumer<NFAState, Integer>() {
+        stateNoSortedList.forEach(new Consumer<Integer>() {
             @Override
-            public void accept(NFAState nfaState, Integer integer) {
+            public void accept(Integer integer) {
                 transTable[index][0] = integer.toString();
                 index++;
             }
