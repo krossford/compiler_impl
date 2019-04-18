@@ -29,7 +29,7 @@ public class NFA {
         all.stream().forEach(new Consumer<NFAState>() {
             @Override
             public void accept(NFAState nfaState) {
-                if (nfaState.hasEmptySingleTrans()) {
+                if (nfaState != state && nfaState.hasEmptySingleTrans()) {
                     nfaState.transMap = nfaState.getEmptySingleTransState().transMap;
                 }
             }
@@ -38,7 +38,9 @@ public class NFA {
         all.stream().forEach(new Consumer<NFAState>() {
             @Override
             public void accept(NFAState nfaState) {
-                removeEmptyTrans(nfaState);
+                if (nfaState != state) {
+                    removeEmptyTrans(nfaState);
+                }
             }
         });
     }
