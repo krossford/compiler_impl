@@ -29,7 +29,10 @@ public class NFA {
         all.stream().forEach(new Consumer<NFAState>() {
             @Override
             public void accept(NFAState nfaState) {
-                if (nfaState != state && nfaState.hasEmptySingleTrans()) {
+                // 如果当前状态不等于自己
+                // 并且这个状态仅有一个空转移
+                // 并且这个空转移的状态不是接受状态
+                if (nfaState != state && nfaState.hasEmptySingleTrans() && !nfaState.getEmptySingleTransState().isAccept) {
                     nfaState.transMap = nfaState.getEmptySingleTransState().transMap;
                 }
             }
@@ -102,15 +105,23 @@ public class NFA {
         sb.delete(sb.length() - 2, sb.length());
         sb.append(" }\n");
 
+        // --------------------
+        // output input symbols
+        // --------------------
         sb.append("input:{ ");
         inputs.forEach(new Consumer<String>() {
             @Override
             public void accept(String s) {
-                sb.append(s).append(", ");
+                sb.append(Util.makeInputReadly(s));
+                sb.append(", ");
             }
         });
         sb.delete(sb.length() - 2, sb.length());
         sb.append(" }\n");
+
+        // ------------------------------
+        // output state translation table
+        // ------------------------------
 
         //                                       row                          col
         String[][] transTable = new String[map_stateObj_to_no.size() + 1][inputs.size() + 1];
@@ -131,7 +142,7 @@ public class NFA {
         inputs.forEach(new Consumer<String>() {
             @Override
             public void accept(String s) {
-                transTable[0][index] = s;
+                transTable[0][index] = Util.makeInputReadly(s);
                 index++;
             }
         });
@@ -141,14 +152,13 @@ public class NFA {
 
         for (int row = 0; row < transTable.length; row++) {
             for (int col = 0; col < transTable[0].length; col++) {
-                if (col == 0) {
-                    eachColMaxWidth[col] = Math.max(transTable[row][0].length(), eachColMaxWidth[col]);
-                }
+
                 if (row != 0 && col != 0) {
                     String s = getStateByInput(Integer.valueOf(transTable[row][0]), transTable[0][col]);
                     transTable[row][col] = s;
-                    eachColMaxWidth[col] = Math.max(s.length(), eachColMaxWidth[col]);
+                    //eachColMaxWidth[col] = Math.max(s.length(), eachColMaxWidth[col]);
                 }
+                eachColMaxWidth[col] = Math.max(Util.makeInputReadly(transTable[row][col]).length(), eachColMaxWidth[col]);
             }
         }
 
@@ -201,6 +211,7 @@ public class NFA {
     }
 
     private static String getStateByInput(int state, String input) {
+        input = Util.makeInputRaw(input);
         Set<NFAState> transResult = map_no_to_stateObj.get(state).transMap.getOrDefault(input, null);
         if (transResult == null || transResult.size() == 0) {
             return "";

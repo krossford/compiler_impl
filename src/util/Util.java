@@ -11,4 +11,20 @@ public class Util {
         java.util.Collections.sort(list);
         return list;
     }
+
+    public static String makeInputReadly(String s) {
+        if (s.equals("")) {
+            return "ε";
+        } else {
+            return s;
+        }
+    }
+
+    public static String makeInputRaw(String s) {
+        if (s.equals("ε")) {
+            return "";
+        } else {
+            return s;
+        }
+    }
 }

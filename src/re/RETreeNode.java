@@ -1,9 +1,6 @@
 package re;
 
-import com.sun.media.sound.RIFFInvalidDataException;
 import nfa.NFA;
-import org.junit.Assert;
-import org.junit.Test;
 
 import java.util.Stack;
 
@@ -133,6 +130,6 @@ public abstract class RETreeNode {
 
     public abstract String toRE();
 
-    public abstract NFA toNFA(boolean isAccept);
 
+    public abstract NFA toNFA(boolean isAccept);
 }
